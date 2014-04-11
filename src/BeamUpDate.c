@@ -5,9 +5,11 @@
 	*/
 
 #include <pebble.h>
-#include "cl_util.h"
+#include "cl_util.h"    
+#include "locale_RO.h"
 
 #define DEBUG false
+#define TIME_DEBUG 0
 
 #define INV_LAYER_WIDTH 30
 #define INV_LAYER_HEIGHT 101
@@ -32,7 +34,9 @@ static int   h_t_digit = 0, h_t_prev = 0,
     		 m_u_digit = 0, m_u_prev = 0;
 static char 
     time_text[5],
-    date_text[] = "Mon 01";
+    date_text[] = "Duminica 01";
+
+struct tm *t;
 
 /**
     * Handle tick function
@@ -40,107 +44,36 @@ static char
 static void handle_tick(struct tm *t, TimeUnits units_changed) 
 {    
     //Get the time
-    int seconds = t->tm_sec;
+    get_time_digits(t);
+    
+    int quints = t->tm_min/15;
      
     //Bottom suface
-    switch(seconds)
+    switch(quints)
     {
-    case 15:
+    case 1:
         cl_animate_layer(inverter_layer_get_layer(bottom_inv_layer), GRect(0, 105, 0, 5), GRect(0, 105, 36, 5), 500, 0);
         break;
-    case 30:
+    case 2:
         cl_animate_layer(inverter_layer_get_layer(bottom_inv_layer), GRect(0, 105, 36, 5), GRect(0, 105, 72, 5), 500, 0);
         break;
-    case 45:
+    case 3:
         cl_animate_layer(inverter_layer_get_layer(bottom_inv_layer), GRect(0, 105, 72, 5), GRect(0, 105, 108, 5), 500, 0);
         break;
-    case 58:
+    case 4:
         cl_animate_layer(inverter_layer_get_layer(bottom_inv_layer), GRect(0, 105, 108, 5), GRect(0, 105, 144, 5), 500, 1000);
-        break;
-    case 59:
-        //Predict next changes
-        predict_next_digits(t); //CALLS get_time_digits()
-         
-        //Only change minutes units if its changed
-        if((m_u_digit != m_u_prev) || (DEBUG)) 
-        {
-            cl_animate_layer(inverter_layer_get_layer(m_u_inv_layer), GRect(MUX+OFFSET, 0, INV_LAYER_WIDTH, 0), GRect(MUX+OFFSET, 0, INV_LAYER_WIDTH, INV_LAYER_HEIGHT), 400, 0);
-            cl_animate_layer(text_layer_get_layer(m_u_layer), GRect(MUX, 53, 50, 60), GRect(MUX, -50, 50, 60), 200, 700);
-        }
-         
-        //Only change minutes tens if its changed
-        if((m_t_digit != m_t_prev) || (DEBUG)) 
-        {
-            cl_animate_layer(inverter_layer_get_layer(m_t_inv_layer), GRect(MTX+OFFSET, 0, INV_LAYER_WIDTH, 0), GRect(MTX+OFFSET, 0, INV_LAYER_WIDTH, INV_LAYER_HEIGHT), 400, 0);
-            cl_animate_layer(text_layer_get_layer(m_t_layer), GRect(MTX, 53, 50, 60), GRect(MTX, -50, 50, 60), 200, 700);
-        }
-         
-        //Only change hours units if its changed
-        if((h_u_digit != h_u_prev) || (DEBUG)) 
-        {
-            cl_animate_layer(inverter_layer_get_layer(h_u_inv_layer), GRect(HUX+OFFSET, 0, INV_LAYER_WIDTH, 0), GRect(HUX+OFFSET, 0, INV_LAYER_WIDTH, INV_LAYER_HEIGHT), 400, 0);
-            cl_animate_layer(text_layer_get_layer(h_u_layer), GRect(HUX, 53, 50, 60), GRect(HUX, -50, 50, 60), 200, 700);
-        }
-         
-        //Only change hours tens if its changed
-        if((h_t_digit != h_t_prev) || (DEBUG)) 
-        {
-            cl_animate_layer(inverter_layer_get_layer(h_t_inv_layer), GRect(HTX+OFFSET, 0, INV_LAYER_WIDTH, 0), GRect(HTX+OFFSET, 0, INV_LAYER_WIDTH, INV_LAYER_HEIGHT), 400, 0);
-            cl_animate_layer(text_layer_get_layer(h_t_layer), GRect(HTX, 53, 50, 60), GRect(HTX, -50, 50, 60), 200, 700);
-        }
-        break;
-    case 0:      
-        get_time_digits(t);
+        break;    
+    }
+    
          
         //Set the time off screen
-        set_time_digits(); 
- 
-        //Animate stuff back into place
-        if((m_u_digit != m_u_prev) || (DEBUG)) 
-        {       
-            cl_animate_layer(text_layer_get_layer(m_u_layer), GRect(MUX, -50, 50, 60), GRect(MUX, 53, 50, 60), 200, 100);
-            cl_animate_layer(inverter_layer_get_layer(m_u_inv_layer), GRect(MUX+OFFSET, 0, INV_LAYER_WIDTH, INV_LAYER_HEIGHT), GRect(MUX+OFFSET, 0, INV_LAYER_WIDTH, 0), 400, 500);
-            m_u_prev = m_u_digit;   //reset the thing
-        }
-        if((m_t_digit != m_t_prev) || (DEBUG)) 
-        {
-            cl_animate_layer(text_layer_get_layer(m_t_layer), GRect(MTX, -50, 50, 60), GRect(MTX, 53, 50, 60), 200, 100);
-            cl_animate_layer(inverter_layer_get_layer(m_t_inv_layer), GRect(MTX+OFFSET, 0, INV_LAYER_WIDTH, INV_LAYER_HEIGHT), GRect(MTX+OFFSET, 0, INV_LAYER_WIDTH, 0), 400, 500);
-            m_t_prev = m_t_digit;   
-        }
-        if((h_u_digit != h_u_prev) || (DEBUG)) 
-        {       
-            cl_animate_layer(text_layer_get_layer(h_u_layer), GRect(HUX, -50, 50, 60), GRect(HUX, 53, 50, 60), 200, 100);
-            cl_animate_layer(inverter_layer_get_layer(h_u_inv_layer), GRect(HUX+OFFSET, 0, INV_LAYER_WIDTH, INV_LAYER_HEIGHT), GRect(HUX+OFFSET, 0, INV_LAYER_WIDTH, 0), 400, 500);
-            h_u_prev = h_u_digit;   
-        }
-        if((h_t_digit != h_t_prev) || (DEBUG)) 
-        {
-            cl_animate_layer(text_layer_get_layer(h_t_layer), GRect(HTX, -50, 50, 60), GRect(HTX, 53, 50, 60), 200, 100);
-            cl_animate_layer(inverter_layer_get_layer(h_t_inv_layer), GRect(HTX+OFFSET, 0, INV_LAYER_WIDTH, INV_LAYER_HEIGHT), GRect(HTX+OFFSET, 0, INV_LAYER_WIDTH, 0), 400, 500);
-            h_t_prev = h_t_digit;   
-        }
-         
+//        set_time_digits(); 
+          
         //Bottom surface down
-        cl_animate_layer(inverter_layer_get_layer(bottom_inv_layer), GRect(0, 105, 144, 5), GRect(0, 105, 0, 5), 500, 500);
-        break;
-    case 2:
-    	//Reset TextLayers to show time
-    	layer_set_frame(text_layer_get_layer(h_t_layer), GRect(HTX, 53, 50, 60));
-    	layer_set_frame(text_layer_get_layer(h_u_layer), GRect(HUX, 53, 50, 60));
-    	layer_set_frame(text_layer_get_layer(m_t_layer), GRect(MTX, 53, 50, 60));
-    	layer_set_frame(text_layer_get_layer(m_u_layer), GRect(MUX, 53, 50, 60));
-
-        //Reset InverterLayers
-        layer_set_frame(inverter_layer_get_layer(h_t_inv_layer), GRect(0, 0, 0, 0));
-        layer_set_frame(inverter_layer_get_layer(h_u_inv_layer), GRect(0, 0, 0, 0));
-        layer_set_frame(inverter_layer_get_layer(m_t_inv_layer), GRect(0, 0, 0, 0));
-        layer_set_frame(inverter_layer_get_layer(m_u_inv_layer), GRect(0, 0, 0, 0));
+ //       cl_animate_layer(inverter_layer_get_layer(bottom_inv_layer), GRect(0, 105, 144, 5), GRect(0, 105, 0, 5), 500, 500);
 
         //Get the time
         set_time_digits(t);
-        break;
-    }
 }
 
 /*
@@ -165,7 +98,7 @@ static void window_load(Window *window) {
     m_u_layer = cl_init_text_layer(GRect(MUX, 53, 50, 60), GColorWhite, GColorClear, true, RESOURCE_ID_FONT_IMAGINE_48, NULL, GTextAlignmentRight);
     layer_add_child(window_get_root_layer(window), text_layer_get_layer(m_u_layer));
 
-    date_layer = cl_init_text_layer(GRect(45, 105, 100, 30), GColorWhite, GColorClear, true, RESOURCE_ID_FONT_IMAGINE_24, NULL, GTextAlignmentRight);
+    date_layer = cl_init_text_layer(GRect(15, 105, 130, 30), GColorWhite, GColorClear, true, RESOURCE_ID_FONT_IMAGINE_24, NULL, GTextAlignmentRight);
     layer_add_child(window_get_root_layer(window), text_layer_get_layer(date_layer));
 	
 	//Allocate inverter layers
@@ -178,12 +111,12 @@ static void window_load(Window *window) {
 	layer_add_child(window_get_root_layer(window), inverter_layer_get_layer(h_t_inv_layer));	
 	layer_add_child(window_get_root_layer(window), inverter_layer_get_layer(h_u_inv_layer));
 	layer_add_child(window_get_root_layer(window), inverter_layer_get_layer(bottom_inv_layer));
-	layer_add_child(window_get_root_layer(window), inverter_layer_get_layer(m_t_inv_layer));		
+	layer_add_child(window_get_root_layer(window), inverter_layer_get_layer(m_t_inv_layer));	
 	layer_add_child(window_get_root_layer(window), inverter_layer_get_layer(m_u_inv_layer));	
 
 	//Make sure the face is not blank
-	time_t temp = time(NULL);	
-	struct tm *t = localtime(&temp);	
+	time_t temp = time(NULL);
+	t = localtime(&temp);
 	get_time_digits(t);
 	
 	//Stop 'all change' on first minute
@@ -194,37 +127,37 @@ static void window_load(Window *window) {
 	
 	set_time_digits();
 
-    //Init seconds bar
-    int seconds = t->tm_sec;
-    if(seconds >= 15 && seconds < 30)
+    //Init progress bar
+    int quints = t->tm_min/15;
+    if(quints == 1)
     {
         cl_animate_layer(inverter_layer_get_layer(bottom_inv_layer), GRect(0, 105, 0, 5), GRect(0, 105, 36, 5), 500, 0);
     }
-    else if(seconds >= 30 && seconds < 45)
+    else if(quints == 2)
     {
         cl_animate_layer(inverter_layer_get_layer(bottom_inv_layer), GRect(0, 105, 0, 5), GRect(0, 105, 72, 5), 500, 0);
     } 
-    else if(seconds >= 45 && seconds < 58)
+    else if(quints == 3)
     {
         cl_animate_layer(inverter_layer_get_layer(bottom_inv_layer), GRect(0, 105, 0, 5), GRect(0, 105, 108, 5), 500, 0);
     }   
-    else if(seconds >= 58)
+    else if(quints == 4)
     {
         cl_animate_layer(inverter_layer_get_layer(bottom_inv_layer), GRect(0, 105, 0, 5), GRect(0, 105, 144, 5), 500, 1000);
-    }
+    }    
 }
 
 /*
  * Unload window members
  */
-static void window_unload(Window *window) {	
+static void window_unload(Window *window) {
 	//Free text layers
 	text_layer_destroy(h_t_layer);
 	text_layer_destroy(h_u_layer);
 	text_layer_destroy(colon_layer);
 	text_layer_destroy(m_t_layer);
 	text_layer_destroy(m_u_layer);
-    text_layer_destroy(date_layer);
+     text_layer_destroy(date_layer);
 	
 	//Free inverter layers
 	inverter_layer_destroy(h_t_inv_layer);
@@ -237,6 +170,10 @@ static void window_unload(Window *window) {
 	tick_timer_service_unsubscribe();
 }
 
+#ifdef DEBUG
+#include "time_debug.h"
+#endif
+    
 /*
  * Init app
  */
@@ -249,10 +186,15 @@ static void init(void) {
 	window_set_window_handlers(window, (WindowHandlers) handlers);
 	
 	//Subscribe to events
-	tick_timer_service_subscribe(SECOND_UNIT, handle_tick);
+	tick_timer_service_subscribe(MINUTE_UNIT, handle_tick);
 	
 	//Finally
     window_stack_push(window, true);
+    
+    #ifdef TIME_DEBUG
+    window_set_click_config_provider_with_context(window, click_config_provider, (void*)window);
+    #endif
+
 }
 
 /*
@@ -297,7 +239,7 @@ void get_time_digits(struct tm *t)
 	h_u_digit = time_text[1] - '0';
 	h_t_digit = time_text[0] - '0';
 
-    strftime(date_text, sizeof(date_text), "%a %d", t);   //Sun 01
+    snprintf(date_text, sizeof(date_text), "%s %02d", LOCALE_DAYS[t->tm_wday], t->tm_mday);
 }
 
 /**

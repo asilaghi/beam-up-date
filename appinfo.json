@@ -1,34 +1,39 @@
 {
-    "versionLabel": "2.0.0",
+    "versionLabel": "1.0.0",
     "uuid": "5264ce58-0164-4481-8eda-e08b2b2db822",
     "appKeys": {
         "dummy": 0
     },
-    "longName": "Beam Up Date",
-    "versionCode": 2,
-    "shortName": "BeamUpDate",
-    "companyName": "Chris Lewis",
+    "longName": "Beam Up Date Longlife Romanian",
+    "versionCode": 1,
+    "capabilities": [
+        ""
+    ],
+    "shortName": "BeamUpDLR",
+    "companyName": "Adrian Silaghi",
     "watchapp": {
         "watchface": true
     },
     "resources": {
         "media": [
             {
-              "type": "font",
-              "name": "FONT_IMAGINE_48",
-              "file": "fonts/imagine.ttf"
+                "menuIcon": true,
+                "type": "png",
+                "name": "IMAGE_MENU_ICON",
+                "file": "images/menu_icon.png"
             },
             {
-              "menuIcon": true,
-              "type": "png",
-              "name": "IMAGE_MENU_ICON",
-              "file": "images/menu_icon.png"
+                "characterRegex": "[0-9:.A-Za-z\\s]",
+                "type": "font",
+                "name": "FONT_IMAGINE_48",
+                "file": "fonts/imagine.ttf"
             },
             {
-			        "name": "FONT_IMAGINE_24",
-			        "type": "font",
-			        "file": "fonts/imagine.ttf"
-        		}
+                "characterRegex": "[0-9:.A-Za-z\\s]",
+                "type": "font",
+                "name": "FONT_IMAGINE_24",
+                "file": "fonts/imagine.ttf"
+            }
         ]
     }
 }
