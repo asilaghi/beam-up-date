@@ -17,10 +17,10 @@
     "resources": {
         "media": [
             {
-                "menuIcon": true,
-                "type": "png",
-                "name": "IMAGE_MENU_ICON",
-                "file": "images/menu_icon.png"
+                "characterRegex": "[0-9:.A-Za-z\\s]",
+                "type": "font",
+                "name": "FONT_IMAGINE_24",
+                "file": "fonts/imagine.ttf"
             },
             {
                 "characterRegex": "[0-9:.A-Za-z\\s]",
@@ -29,10 +29,10 @@
                 "file": "fonts/imagine.ttf"
             },
             {
-                "characterRegex": "[0-9:.A-Za-z\\s]",
-                "type": "font",
-                "name": "FONT_IMAGINE_24",
-                "file": "fonts/imagine.ttf"
+                "menuIcon": true,
+                "type": "png",
+                "name": "IMAGE_MENU_ICON",
+                "file": "images/menu_icon.png"
             }
         ]
     }
