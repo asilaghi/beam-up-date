@@ -2,11 +2,11 @@
 
 static const char* const LOCALE_DAYS[] = {
     "",
-    "Duminica"
+    "Dum"
     "Luni",
     "Marti",
     "Miercuri",
     "Joi",
     "Vineri",
-    "Sambata"
+    "Sam"
 };

@@ -7,7 +7,7 @@
     "longName": "Beam Up Date Longlife Romanian",
     "versionCode": 1,
     "capabilities": [
-        ""
+        "configurable"
     ],
     "shortName": "BeamUpDLR",
     "companyName": "Adrian Silaghi",
