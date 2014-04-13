@@ -17,15 +17,19 @@
       <div data-role="content">
 
         <div data-role="fieldcontain">
-          <label for="name">Name:</label>
-          <textarea cols="40" rows="8" name="name" id="name"></textarea>
-        </div>
-
-        <div data-role="fieldcontain">
-          <label for="special-feature">Show date:</label>
+          <label for="showDate">Show date:</label>
           <select name="showDate" id="showDate" data-role="slider">
             <option value="off">No</option>
             <option value="on">Yes</option>
+          </select>
+        </div>
+        
+        <div data-role="fieldcontain">
+          <label for="barWeight">Progress bar weight:</label>
+          <select name="barWeight" id="barWeight">
+            <option value="off">none</option>
+            <option value="3">3 points</option>
+            <option value="5">5 points</option>
           </select>
         </div>
 
@@ -42,7 +46,8 @@
       function saveOptions() {
         var options = {
           'name': $("#name").val(),
-          'showDate': $("#showDate").val()
+          'showDate': $("#showDate").val(),
+          'barWeight': $("#barWeight").val()
         }
         return options;
       }
