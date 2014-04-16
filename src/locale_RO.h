@@ -1,11 +1,10 @@
 #pragma once
 
 static const char* const LOCALE_DAYS[] = {
-    "",
-    "Dum"
+    "Dum",
     "Luni",
     "Marti",
-    "Miercuri",
+    "Mier",
     "Joi",
     "Vineri",
     "Sam"

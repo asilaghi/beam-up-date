@@ -22,7 +22,6 @@
 //Prototypes
 void get_time_digits(struct tm *t);
 void set_time_digits();
-void predict_next_digits(struct tm *t);
 
 //Globals
 static Window *window;
@@ -37,43 +36,42 @@ static char
     date_text[] = "Duminica 01";
 
 struct tm *t;
+static int currentQuarter = -1;
+
+static void update_progress_bar(struct tm *t) {
+    int quarter = t->tm_min/13;
+    
+    if(currentQuarter != quarter) {
+        currentQuarter = quarter;
+        switch(quarter) {
+            case 0:
+                cl_animate_layer(inverter_layer_get_layer(bottom_inv_layer), GRect(0, 105, 144, 5), GRect(0, 105, 0, 5), 500, 0);        
+                break;
+            case 1:
+                cl_animate_layer(inverter_layer_get_layer(bottom_inv_layer), GRect(0, 105, 0, 5), GRect(0, 105, 36, 5), 500, 0);
+                break;
+            case 2:
+                cl_animate_layer(inverter_layer_get_layer(bottom_inv_layer), GRect(0, 105, 36, 5), GRect(0, 105, 72, 5), 500, 0);
+                break;
+            case 3:
+                cl_animate_layer(inverter_layer_get_layer(bottom_inv_layer), GRect(0, 105, 72, 5), GRect(0, 105, 108, 5), 500, 0);
+                break;
+            case 4:
+                cl_animate_layer(inverter_layer_get_layer(bottom_inv_layer), GRect(0, 105, 108, 5), GRect(0, 105, 144, 5), 500, 1000);
+                break;    
+        }
+    }   
+}
 
 /**
-    * Handle tick function
-    */
+ * Handle tick function
+ */
 static void handle_tick(struct tm *t, TimeUnits units_changed) 
 {    
     //Get the time
     get_time_digits(t);
-    
-    int quints = t->tm_min/15;
-     
-    //Bottom suface
-    switch(quints)
-    {
-    case 1:
-        cl_animate_layer(inverter_layer_get_layer(bottom_inv_layer), GRect(0, 105, 0, 5), GRect(0, 105, 36, 5), 500, 0);
-        break;
-    case 2:
-        cl_animate_layer(inverter_layer_get_layer(bottom_inv_layer), GRect(0, 105, 36, 5), GRect(0, 105, 72, 5), 500, 0);
-        break;
-    case 3:
-        cl_animate_layer(inverter_layer_get_layer(bottom_inv_layer), GRect(0, 105, 72, 5), GRect(0, 105, 108, 5), 500, 0);
-        break;
-    case 4:
-        cl_animate_layer(inverter_layer_get_layer(bottom_inv_layer), GRect(0, 105, 108, 5), GRect(0, 105, 144, 5), 500, 1000);
-        break;    
-    }
-    
-         
-        //Set the time off screen
-//        set_time_digits(); 
-          
-        //Bottom surface down
- //       cl_animate_layer(inverter_layer_get_layer(bottom_inv_layer), GRect(0, 105, 144, 5), GRect(0, 105, 0, 5), 500, 500);
-
-        //Get the time
-        set_time_digits(t);
+    set_time_digits(t);
+    update_progress_bar(t);
 }
 
 /*
@@ -128,23 +126,7 @@ static void window_load(Window *window) {
 	set_time_digits();
 
     //Init progress bar
-    int quints = t->tm_min/15;
-    if(quints == 1)
-    {
-        cl_animate_layer(inverter_layer_get_layer(bottom_inv_layer), GRect(0, 105, 0, 5), GRect(0, 105, 36, 5), 500, 0);
-    }
-    else if(quints == 2)
-    {
-        cl_animate_layer(inverter_layer_get_layer(bottom_inv_layer), GRect(0, 105, 0, 5), GRect(0, 105, 72, 5), 500, 0);
-    } 
-    else if(quints == 3)
-    {
-        cl_animate_layer(inverter_layer_get_layer(bottom_inv_layer), GRect(0, 105, 0, 5), GRect(0, 105, 108, 5), 500, 0);
-    }   
-    else if(quints == 4)
-    {
-        cl_animate_layer(inverter_layer_get_layer(bottom_inv_layer), GRect(0, 105, 0, 5), GRect(0, 105, 144, 5), 500, 1000);
-    }    
+    update_progress_bar(t);
 }
 
 /*
@@ -247,68 +229,21 @@ void get_time_digits(struct tm *t)
     */
 void set_time_digits() 
 {  
-    if(DEBUG == false)
-    {
-        //Include null chars
-        static char chars[4][2] = {"1", "2", "3", "4"};
-        chars[0][0] = time_text[4];
-        chars[1][0] = time_text[3];
-        chars[2][0] = time_text[1];
-        chars[3][0] = time_text[0];
+    //Include null chars
+    static char chars[4][2] = {"1", "2", "3", "4"};
+    chars[0][0] = time_text[4];
+    chars[1][0] = time_text[3];
+    chars[2][0] = time_text[1];
+    chars[3][0] = time_text[0];
 
-        //Set digits in TextLayers
-        text_layer_set_text(h_t_layer, chars[3]);
-        text_layer_set_text(h_u_layer, chars[2]);
-        text_layer_set_text(colon_layer, ":");
-        text_layer_set_text(m_t_layer, chars[1]);
-        text_layer_set_text(m_u_layer, chars[0]);
+    //Set digits in TextLayers
+    text_layer_set_text(h_t_layer, chars[3]);
+    text_layer_set_text(h_u_layer, chars[2]);
+    text_layer_set_text(colon_layer, ":");
+    text_layer_set_text(m_t_layer, chars[1]);
+    text_layer_set_text(m_u_layer, chars[0]);
 
-        text_layer_set_text(date_layer, date_text);
-    }
-    else
-    {
-        text_layer_set_text(h_t_layer, "2");
-        text_layer_set_text(h_u_layer, "3");
-        text_layer_set_text(colon_layer, ":");
-        text_layer_set_text(m_t_layer, "5");
-        text_layer_set_text(m_u_layer, "9");
-    }
+    text_layer_set_text(date_layer, date_text);
 }
 
-/**
-    * Function to predict digit changes to make the digit change mechanic fire correctly.
-    * If the values change at seconds == 0, then the animations depending on m_u_digit != m_u_prev
-    * will not fire! 
-    * The solution is to advance the ones about to change pre-emptively
-    */
-void predict_next_digits(struct tm *t) {
-    //These will be for the previous minute at 59 seconds
-    get_time_digits(t);
-     
-    //Fix hours tens
-    if
-    (
-       ((h_t_digit == 0) && (h_u_digit == 9) && (m_t_digit == 5) && (m_u_digit == 9)) //09:59 --> 10:00
-    || ((h_t_digit == 1) && (h_u_digit == 9) && (m_t_digit == 5) && (m_u_digit == 9))   //19:59 --> 20:00
-    || ((h_t_digit == 2) && (h_u_digit == 3) && (m_t_digit == 5) && (m_u_digit == 9))   //23:59 --> 00:00
-    )
-    {
-        h_t_digit++;
-    }
- 
-    //Fix hours units
-    if((m_t_digit == 5) && (m_u_digit == 9))
-    {
-        h_u_digit++;
-    }
- 
-    //Fix minutes tens
-    if(m_u_digit == 9)    //Minutes Tens about to change
-    {
-        m_t_digit++;
-    }
-         
-    //Finally fix minutes units
-    m_u_digit++;
-}
 

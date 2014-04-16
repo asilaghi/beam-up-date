@@ -4,12 +4,12 @@
     "appKeys": {
         "dummy": 0
     },
-    "longName": "Beam Up Date Longlife Romanian",
+    "longName": "Imagine Date Longlife RO",
     "versionCode": 1,
     "capabilities": [
         "configurable"
     ],
-    "shortName": "BeamUpDLR",
+    "shortName": "ImagineDLR",
     "companyName": "Adrian Silaghi",
     "watchapp": {
         "watchface": true
@@ -17,10 +17,10 @@
     "resources": {
         "media": [
             {
-                "characterRegex": "[0-9:.A-Za-z\\s]",
-                "type": "font",
-                "name": "FONT_IMAGINE_24",
-                "file": "fonts/imagine.ttf"
+                "menuIcon": true,
+                "type": "png",
+                "name": "IMAGE_MENU_ICON",
+                "file": "images/menu_icon.png"
             },
             {
                 "characterRegex": "[0-9:.A-Za-z\\s]",
@@ -29,10 +29,10 @@
                 "file": "fonts/imagine.ttf"
             },
             {
-                "menuIcon": true,
-                "type": "png",
-                "name": "IMAGE_MENU_ICON",
-                "file": "images/menu_icon.png"
+                "characterRegex": "[0-9:.A-Za-z\\s]",
+                "type": "font",
+                "name": "FONT_IMAGINE_24",
+                "file": "fonts/imagine.ttf"
             }
         ]
     }
