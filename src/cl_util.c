@@ -103,7 +103,7 @@ void cl_send_int(uint8_t key, uint8_t cmd)
  */
 void cl_applog(char* message)
 {
-  app_log(APP_LOG_LEVEL_INFO, "wristponder.c", 0, message);
+  app_log(APP_LOG_LEVEL_INFO, "", 0, message);
 }
 
 /*

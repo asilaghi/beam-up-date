@@ -9,3 +9,6 @@ static const char* const LOCALE_DAYS[] = {
     "Vineri",
     "Sam"
 };
+
+static const char LOCALE_BT_OFF[] = "neconectat";
+static const char LOCALE_BT_ON[] = "";
