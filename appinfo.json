@@ -1,24 +1,25 @@
 {
-    "uuid": "5264ce58-0164-4481-8eda-e08b2b2db822",
+    "uuid": "9D3887D8-8195-4DEB-9610-13FC380DC449",
     "watchapp": {
         "watchface": true
     },
-    "versionLabel": "1.0.0",
+    "versionLabel": "2.0.0",
     "companyName": "Adrian Silaghi",
     "capabilities": [
         "configurable"
     ],
     "shortName": "ImagineDLR",
     "longName": "Imagine Date Longlife RO",
-    "versionCode": 1,
+    "versionCode": 2,
     "appKeys": {
         "dummy": 0
     },
     "resources": {
         "media": [
             {
+                "characterRegex": "[0-9:.A-Za-z\\s]",
                 "type": "font",
-                "name": "FONT_IMAGINE_12",
+                "name": "FONT_IMAGINE_24",
                 "file": "fonts/imagine.ttf"
             },
             {
@@ -28,9 +29,8 @@
                 "file": "fonts/imagine.ttf"
             },
             {
-                "characterRegex": "[0-9:.A-Za-z\\s]",
                 "type": "font",
-                "name": "FONT_IMAGINE_24",
+                "name": "FONT_IMAGINE_12",
                 "file": "fonts/imagine.ttf"
             },
             {

@@ -41,7 +41,7 @@ static int
 static char 
     time_text[5],
     date_text[] = "Duminica 01",
-    batt_text[] = "~100%",
+    batt_text[] = "~100 %",
     blue_text[] = "neconectat";
 
 
@@ -94,9 +94,9 @@ static void handle_tap(AccelAxisType axis, int32_t direction) {
     //get battery state
     BatteryChargeState state = battery_state_service_peek();
     if(state.is_plugged && state.is_charging) {
-        snprintf(batt_text, 10, "+%d%%", state.charge_percent);
+        snprintf(batt_text, 10, "+%d %%", state.charge_percent);
     } else {
-        snprintf(batt_text, 10, "%d%%", state.charge_percent);     
+        snprintf(batt_text, 10, "%d %%", state.charge_percent);     
     }
     text_layer_set_text(batt_layer, batt_text);
     layer_set_hidden(text_layer_get_layer(batt_layer), false);
