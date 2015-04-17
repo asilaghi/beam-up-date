@@ -1,44 +1,53 @@
 {
-    "uuid": "9D3887D8-8195-4DEB-9610-13FC380DC449",
-    "watchapp": {
-        "watchface": true
-    },
-    "versionLabel": "2.0.0",
-    "companyName": "Adrian Silaghi",
-    "capabilities": [
-        "configurable"
-    ],
-    "shortName": "ImagineDLR",
-    "longName": "Imagine Date Longlife RO",
-    "versionCode": 2,
     "appKeys": {
         "dummy": 0
     },
+    "capabilities": [
+        ""
+    ],
+    "companyName": "Adrian Silaghi",
+    "longName": "Imagine Date Longlife RO",
+    "projectType": "native",
     "resources": {
         "media": [
             {
                 "characterRegex": "[0-9:.A-Za-z\\s]",
-                "type": "font",
+                "compatibility": "2.7",
+                "file": "fonts/imagine.ttf",
                 "name": "FONT_IMAGINE_24",
-                "file": "fonts/imagine.ttf"
+                "type": "font"
             },
             {
                 "characterRegex": "[0-9:.A-Za-z\\s]",
-                "type": "font",
+                "compatibility": "2.7",
+                "file": "fonts/imagine.ttf",
                 "name": "FONT_IMAGINE_48",
-                "file": "fonts/imagine.ttf"
+                "type": "font"
             },
             {
-                "type": "font",
+                "compatibility": "2.7",
+                "file": "fonts/imagine.ttf",
                 "name": "FONT_IMAGINE_12",
-                "file": "fonts/imagine.ttf"
+                "type": "font"
             },
             {
-                "type": "png",
+                "file": "images/menu_icon.png",
                 "menuIcon": true,
                 "name": "IMAGE_MENU_ICON",
-                "file": "images/menu_icon.png"
+                "type": "png"
             }
         ]
+    },
+    "sdkVersion": "3",
+    "shortName": "ImagineDLR",
+    "targetPlatforms": [
+        "aplite",
+        "basalt"
+    ],
+    "uuid": "9D3887D8-8195-4DEB-9610-13FC380DC449",
+    "versionCode": 2,
+    "versionLabel": "3.0",
+    "watchapp": {
+        "watchface": true
     }
 }
